@@ -1,0 +1,44 @@
+# Simple Linear Regression 
+
+import sklearn as sk
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+
+df = pd.read_csv("FuelEconomy.csv")
+print("Desciption of data:",df.describe())
+print("Displays First N rows",df.head())
+print("Dsplays number of rows and columns:",df.shape)
+
+
+plt.scatter(df.HP,df.MPG,color='blue')
+plt.title('FuelEconomy',size = 20, color= 'red')
+plt.xlabel('Horse Power')
+plt.ylabel('Miles Per Gallon')
+plt.show()
+
+x = df[["HP"]]
+y = df[["MPG"]]
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.33)
+
+
+regr = LinearRegression()
+
+
+regr.fit(x_train,y_train)
+print('Coefficients: ',regr.coef_)
+print('Intercept: ',regr.intercept_)
+print('Singular: ',regr.singular_)
+print('Rank: ',regr.rank_)
+
+test_y_cap = regr.predict(x_test)
+
+msq = np.mean(np.power((test_y_cap - y_test),2),axis = 0)
+print('Mean Square Error is {0}'.format(msq))
+
+R2_Score = r2_score(test_y_cap,y_test)
+print('R2 Score is {0}'.format(R2_Score))
