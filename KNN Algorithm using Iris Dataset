@@ -1,0 +1,40 @@
+#KNN Algorithm using Default Iris Dataset
+
+import sklearn as sk
+from sklearn import datasets
+from sklearn import neighbors
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+
+
+#Step 1: To load the datatsets
+d1 = datasets.load_iris()
+print("Datasets: ",d1)
+
+#step 2: To divide and store the data and target 
+x = d1.data
+y = d1.target
+
+
+
+#step 3: splitting the datasets into train and test
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.33,random_state=42)
+print("Training Features:", x_train)
+print("Training Labels:", y_train)
+print("Testing Features:", x_test)
+print("Testing Labels:", y_test)
+
+
+#step 4: model definition
+model = sk.neighbors.KNeighborsClassifier(n_neighbors= 2, weights = 'distance', metric = 'euclidean')
+
+#step 5: model fit(training) and model predict(testing)
+model.fit(x_train,y_train)
+dataclass = model.predict(x_test) #prediction on testing features
+print("Dataclass Values:",dataclass)
+print("Dataclass Names: ",d1.target_names[dataclass])
+
+#step 6: Accuracy Score & Confusion Matrix
+print("Accuracy Score:",accuracy_score(y_test, dataclass, normalize = True, sample_weight = None))
+print("Confusion Matrix:", sk.metrics.confusion_matrix(y_test, dataclass, labels = [0,1,2]))
