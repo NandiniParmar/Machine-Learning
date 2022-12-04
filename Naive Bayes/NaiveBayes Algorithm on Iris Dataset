@@ -1,0 +1,37 @@
+#Naive Bayes Classifier on Iris dataset
+
+import sklearn as sk
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+import pandas as pd
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+import numpy as np
+
+
+df = pd.read_csv("iris.csv")
+print(df.describe())
+print(df.head())
+print(df.shape)
+
+
+x = df[["sepal_length","sepal_width","petal_length","petal_width"]]
+y = df[["species"]]
+
+
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.33,random_state=42)
+print("Training Features:",x_train)
+print("Training Labels:",y_train)
+print("Testing Features:",x_test)
+print("Testing Labels:",y_test)
+
+#Model Define
+model = GaussianNB()
+
+y_train = np.array(y_train).reshape(-1)
+model.fit(x_train,y_train)
+y_pred = model.predict(x_test)
+
+
+print("Accuracy Score:",accuracy_score(y_test,y_pred,normalize=True,sample_weight = None))
+print("Confusion Matrix:",confusion_matrix(y_test,y_pred))
