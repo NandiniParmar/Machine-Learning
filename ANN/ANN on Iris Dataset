@@ -1,0 +1,38 @@
+#ANN Algorithm
+
+#Step 1: import libraries
+import sklearn as sk
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn.neural_network import MLPClassifier
+
+#Step 2: Load dataset
+dataset = datasets.load_iris()
+print("Dataset:",dataset)
+
+#Step 3: Classify features and target and split it 
+x=dataset.data
+y=dataset.target
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.33,random_state=42)
+
+#Step 4: define model
+annmodel = MLPClassifier(solver='sgd',alpha=0.00001,hidden_layer_sizes=(5,),max_iter=20)
+
+#Step 5:Fit model on train data
+annmodel.fit(x_train,y_train)
+
+#Predict the model on test data
+dataclasstest = annmodel.predict(x_test)
+dataclasstrain = annmodel.predict(x_train)
+
+print(dataset.target_names[dataclasstest])
+
+#Step 6: Accuracy Score on both train and test data
+print("Accuracy Score on test data:",accuracy_score(y_test,dataclasstest))
+print("Accuracy Score on train data:",accuracy_score(y_train,dataclasstrain))
+
+#Step 7: Confusion Matrix and Weights
+print("Confusion Matrix",confusion_matrix(y_test,dataclasstest,labels=[0,1,2]))
+print("Weights : 0",annmodel.coefs_[0])
+print("Weights : 1",annmodel.coefs_[1])
